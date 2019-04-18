@@ -1,0 +1,40 @@
+{
+	"name": "hyposition",
+	"version": "0.0.1",
+	"description": "",
+	"main": "webpack.config.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"watch": "webpack --mode development --watch"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/joeltg/hyposition.git"
+	},
+	"author": "",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/joeltg/hyposition/issues"
+	},
+	"homepage": "https://github.com/joeltg/hyposition#readme",
+	"devDependencies": {
+		"@babel/core": "^7.4.3",
+		"@babel/plugin-proposal-class-properties": "^7.4.0",
+		"@babel/plugin-proposal-object-rest-spread": "^7.4.3",
+		"@babel/preset-env": "^7.4.3",
+		"@babel/preset-react": "^7.0.0",
+		"@babel/preset-typescript": "^7.3.3",
+		"babel-loader": "^8.0.5",
+		"typescript": "^3.4.3",
+		"webpack": "^4.30.0",
+		"webpack-cli": "^3.3.0"
+	},
+	"dependencies": {
+		"@types/react": "^16.8.13",
+		"@types/react-dom": "^16.8.4",
+		"immutable": "^4.0.0-rc.12",
+		"jsonld": "^1.5.4",
+		"react": "^16.8.6",
+		"react-dom": "^16.8.6"
+	}
+}

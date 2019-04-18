@@ -1,0 +1,67 @@
+.catalog {
+	display: flex;
+	flex-direction: column;
+	font-family: monospace;
+	width: 720px;
+}
+
+.catalog .search {
+	display: flex;
+	margin: 0.5em 0;
+}
+
+.catalog .search input {
+	flex: 1;
+	padding: 1px 3px;
+	font-family: inherit;
+	font-size: inherit;
+}
+
+.catalog .tree .entry {
+	white-space: pre;
+}
+.catalog .tree .entry.focused span {
+	font-weight: bold;
+	text-decoration: underline;
+}
+
+.content {
+	display: flex;
+	padding: 0 0.5em;
+}
+
+.content .tree {
+	height: 240px;
+	overflow-y: auto;
+	padding-right: 1em;
+	min-width: 180px;
+	flex-shrink: 0;
+
+	border-right: 1px solid rgb(218, 218, 218);
+}
+
+.documentation {
+	flex: 1;
+	padding-left: 1em;
+	overflow: auto;
+	display: flex;
+	flex-direction: column;
+}
+
+.documentation h1 {
+	margin: 0;
+}
+
+.documentation .description {
+	overflow: auto;
+	flex: 1;
+}
+
+.noselect {
+	-webkit-touch-callout: none; /* iOS Safari */
+	-webkit-user-select: none; /* Safari */
+	-khtml-user-select: none; /* Konqueror HTML */
+	-moz-user-select: none; /* Firefox */
+	-ms-user-select: none; /* Internet Explorer/Edge */
+	user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
+}
