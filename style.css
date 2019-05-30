@@ -1,16 +1,30 @@
+.graph {
+	width: 720px;
+}
+
+.identity {
+	display: flex;
+	flex-direction: column;
+	margin: 0.5em;
+	font-family: monospace;
+}
+
+.identity .drawer {
+	padding: 0.5em;
+}
+
 .catalog {
 	display: flex;
 	flex-direction: column;
 	font-family: monospace;
-	width: 720px;
+	margin: 0.5em;
 }
 
 .catalog .search {
 	display: flex;
-	margin: 0.5em 0;
 }
 
-.catalog .search input {
+input[type="text"] {
 	flex: 1;
 	padding: 1px 3px;
 	font-family: inherit;
@@ -18,25 +32,26 @@
 }
 
 .catalog .tree .entry {
+	cursor: pointer;
 	white-space: pre;
 }
+
 .catalog .tree .entry.focused span {
 	font-weight: bold;
 	text-decoration: underline;
 }
 
 .content {
+	height: 240px;
 	display: flex;
-	padding: 0 0.5em;
+	padding: 0.5em;
 }
 
 .content .tree {
-	height: 240px;
 	overflow-y: auto;
 	padding-right: 1em;
 	min-width: 180px;
 	flex-shrink: 0;
-
 	border-right: 1px solid rgb(218, 218, 218);
 }
 
@@ -53,6 +68,7 @@
 }
 
 .documentation .description {
+	font-family: initial;
 	overflow: auto;
 	flex: 1;
 }

@@ -8,7 +8,9 @@ import { CLASS, THING, LABEL, COMMENT } from "./schema/constants"
 interface CatalogProps {
 	catalog: CatalogType
 	roots: List<string>
+	filters: List<string>
 	autoFocus: boolean
+	// onFocus: () => void
 	onSelect: (id: string) => void
 }
 
@@ -16,6 +18,7 @@ interface CatalogState {
 	open: boolean
 	value: string
 	focus: number
+	mouse: boolean
 	entries: List<List<string>>
 }
 
@@ -28,6 +31,8 @@ export default class Catalog extends React.Component<
 	static Expanded = "○ "
 	static Collapsed = "● "
 	static Empty = "- "
+
+	static Placeholder = "Set type classes"
 
 	static expandRoot(
 		state: Readonly<CatalogState>,
@@ -91,9 +96,37 @@ export default class Catalog extends React.Component<
 			open: props.autoFocus,
 			value: "",
 			focus: 0,
+			mouse: false,
 			entries: props.roots.map(root => List([root])),
 		}
 		this.state = { ...state, ...Catalog.expandRoot(state, props), focus: 0 }
+		this.tree = null
+		this.scroll = null
+	}
+
+	private tree: null | HTMLDivElement
+	private scroll: null | HTMLDivElement
+
+	componentDidUpdate(_: CatalogProps, state: CatalogState) {
+		if (
+			!this.state.mouse &&
+			state.focus !== this.state.focus &&
+			this.tree !== null &&
+			this.scroll !== null
+		) {
+			const top = this.tree.scrollTop
+			const bot = top + this.tree.offsetHeight
+			const div = this.scroll.offsetHeight / this.state.entries.size
+			const margin = 2 * div
+			const current = div * this.state.focus
+			if (current < top + margin) {
+				this.tree.scrollTop = Math.max(0, current - margin)
+			} else if (current + div + margin > bot) {
+				this.tree.scrollTop =
+					Math.min(this.tree.scrollHeight, current + div + margin) -
+					this.tree.offsetHeight
+			}
+		}
 	}
 
 	handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -111,7 +144,7 @@ export default class Catalog extends React.Component<
 				this.setState(state => {
 					const size = state.entries.size
 					const focus = (state.focus + size - 1) % size
-					return { focus }
+					return { focus, mouse: false }
 				})
 			} else if (event.keyCode === 39) {
 				// right
@@ -121,7 +154,7 @@ export default class Catalog extends React.Component<
 				this.setState(state => {
 					const size = state.entries.size
 					const focus = (state.focus + 1) % size
-					return { focus }
+					return { focus, mouse: false }
 				})
 			}
 		} else if (event.keyCode === 27) {
@@ -151,19 +184,21 @@ export default class Catalog extends React.Component<
 	}
 
 	render() {
-		const { autoFocus } = this.props
+		const { autoFocus, children } = this.props
 		const { open, value } = this.state
 		return (
 			<div className="catalog">
 				<div className="search">
 					<input
 						type="text"
+						placeholder={Catalog.Placeholder}
 						autoFocus={autoFocus}
 						value={value}
 						onKeyDown={this.handleKeyDown}
 						onChange={this.handleChange}
 						onFocus={this.handleFocus}
 					/>
+					{children}
 				</div>
 				{open ? (
 					<div className="content">
@@ -179,16 +214,14 @@ export default class Catalog extends React.Component<
 		const { entries, focus } = this.state
 		const tree = trees[this.props.catalog]
 		return (
-			<div className="tree">
-				{entries.map((root, index) =>
-					this.renderEntry(
-						root,
-						index,
-						entries.get(index + 1, root).size > root.size,
-						index === focus,
-						tree
-					)
-				)}
+			<div className="tree" ref={div => (this.tree = div)}>
+				<div className="scroll" ref={div => (this.scroll = div)}>
+					{entries.map((entry, index) => {
+						const expanded = entries.get(index + 1, entry).size > entry.size
+						const focused = index === focus
+						return this.renderEntry(entry, index, expanded, focused, tree)
+					})}
+				</div>
 			</div>
 		)
 	}
@@ -220,7 +253,12 @@ export default class Catalog extends React.Component<
 				className.push("focused")
 			}
 			return (
-				<div key={index} className={className.join(" ")}>
+				<div
+					key={index}
+					className={className.join(" ")}
+					onMouseEnter={_ => this.setState({ focus: index, mouse: true })}
+					onClick={_ => this.props.onSelect(id)}
+				>
 					{prefix}
 					<span>{nodes[id][LABEL]}</span>
 				</div>

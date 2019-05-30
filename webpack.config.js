@@ -1,7 +1,8 @@
-const exclude = /(?:node_modules|\.min\.js$|dist\/)/
+const path = require("path")
+const index = path.resolve(__dirname, "src", "index.tsx")
 
 module.exports = {
-	entry: "./src/index.tsx",
+	entry: ["@babel/polyfill", index],
 	output: {
 		filename: "bundle.min.js",
 		path: __dirname + "/dist",
@@ -15,7 +16,7 @@ module.exports = {
 		rules: [
 			{
 				test: /\.(js|ts)x?$/,
-				exclude,
+				exclude: /(?:node_modules|\.min\.js$|dist\/)/,
 				use: "babel-loader",
 			},
 		],

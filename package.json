@@ -1,39 +1,41 @@
 {
-	"name": "hyposition",
+	"name": "anagraph",
 	"version": "0.0.1",
 	"description": "",
 	"main": "webpack.config.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"watch": "webpack --mode development --watch"
+		"watch": "webpack --mode development --watch",
+		"build": "webpack --mode production"
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/joeltg/hyposition.git"
+		"url": "git+https://github.com/joeltg/anagraph.git"
 	},
 	"author": "",
 	"license": "MIT",
 	"bugs": {
-		"url": "https://github.com/joeltg/hyposition/issues"
+		"url": "https://github.com/joeltg/anagraph/issues"
 	},
-	"homepage": "https://github.com/joeltg/hyposition#readme",
+	"homepage": "https://github.com/joeltg/anagraph#readme",
 	"devDependencies": {
-		"@babel/core": "^7.4.3",
-		"@babel/plugin-proposal-class-properties": "^7.4.0",
-		"@babel/plugin-proposal-object-rest-spread": "^7.4.3",
-		"@babel/preset-env": "^7.4.3",
+		"@babel/core": "^7.4.5",
+		"@babel/plugin-proposal-class-properties": "^7.4.4",
+		"@babel/plugin-proposal-object-rest-spread": "^7.4.4",
+		"@babel/preset-env": "^7.4.5",
 		"@babel/preset-react": "^7.0.0",
 		"@babel/preset-typescript": "^7.3.3",
-		"babel-loader": "^8.0.5",
-		"typescript": "^3.4.3",
-		"webpack": "^4.30.0",
-		"webpack-cli": "^3.3.0"
+		"babel-loader": "^8.0.6",
+		"typescript": "^3.5.1",
+		"webpack": "^4.32.2",
+		"webpack-cli": "^3.3.2"
 	},
 	"dependencies": {
-		"@types/react": "^16.8.13",
+		"@babel/polyfill": "^7.4.4",
+		"@types/react": "^16.8.19",
 		"@types/react-dom": "^16.8.4",
 		"immutable": "^4.0.0-rc.12",
-		"jsonld": "^1.5.4",
+		"jsonld": "^1.6.2",
 		"react": "^16.8.6",
 		"react-dom": "^16.8.6"
 	}
