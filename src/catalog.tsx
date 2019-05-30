@@ -1,14 +1,16 @@
 import React from "react"
-import { List } from "immutable"
+import { List, Set } from "immutable"
+
+import Fuse from "fuse.js"
 
 import { CatalogType } from "./schema/schema"
 import { nodes, trees, Tree } from "./schema/index"
-import { CLASS, THING, LABEL, COMMENT } from "./schema/constants"
+import { THING, LABEL, COMMENT } from "./schema/constants"
 
 interface CatalogProps {
+	placeholder: string
 	catalog: CatalogType
 	roots: List<string>
-	filters: List<string>
 	autoFocus: boolean
 	// onFocus: () => void
 	onSelect: (id: string) => void
@@ -25,14 +27,18 @@ interface CatalogState {
 export default class Catalog extends React.Component<
 	CatalogProps,
 	CatalogState
-> {
+	> {
+	private fuse: any
 	static Spacing = 2
-	static Space = " "
-	static Expanded = "○ "
-	static Collapsed = "● "
-	static Empty = "- "
 
-	static Placeholder = "Set type classes"
+	static MaxResults = 10
+	static FuseOptions = {
+		id: "id",
+		shouldSort: true,
+		location: 0,
+		threshold: 0.3,
+		keys: [{ name: "label", weight: 0.8 }, { name: "comment", weight: 0.2 }],
+	}
 
 	static expandRoot(
 		state: Readonly<CatalogState>,
@@ -90,6 +96,10 @@ export default class Catalog extends React.Component<
 		return null
 	}
 
+	static enumerate(roots: List<string>, set: Set<string>, tree: Tree): Set<string> {
+		return roots.reduce((set: Set<string>, root: string) => Catalog.enumerate(List(tree[root]), set.add(root), tree), set)
+	}
+
 	constructor(props: CatalogProps) {
 		super(props)
 		const state = {
@@ -99,9 +109,15 @@ export default class Catalog extends React.Component<
 			mouse: false,
 			entries: props.roots.map(root => List([root])),
 		}
-		this.state = { ...state, ...Catalog.expandRoot(state, props), focus: 0 }
+
+		const ids = Catalog.enumerate(props.roots, Set(), trees[props.catalog])
+		const records = ids.map(id => ({ id, label: nodes[id][LABEL], comment: nodes[id][COMMENT] }))
+		this.fuse = new Fuse(records.toArray(), Catalog.FuseOptions)
+
 		this.tree = null
 		this.scroll = null
+
+		this.state = { ...state, ...Catalog.expandRoot(state, props), focus: 0 }
 	}
 
 	private tree: null | HTMLDivElement
@@ -129,8 +145,21 @@ export default class Catalog extends React.Component<
 		}
 	}
 
+	handleSelect = (id: string) => {
+		this.setState(
+			{ open: false, value: "", focus: 0, entries: this.props.roots.map(root => List([root])) },
+			() => this.props.onSelect(id)
+		)
+	}
+
 	handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		this.setState({ value: event.target.value })
+		const { value } = event.target
+		if (value === "") {
+			this.setState({ focus: 0, value, entries: this.props.roots.map(root => List([root])), })
+		} else {
+			const records: string[] = this.fuse.search(value).slice(0, Catalog.MaxResults)
+			this.setState({ focus: 0, value, entries: List(records).map(record => List([record])) })
+		}
 	}
 
 	handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -170,10 +199,7 @@ export default class Catalog extends React.Component<
 				const id = entry.last(null)
 				if (id !== null) {
 					event.currentTarget.blur()
-					this.setState(
-						state => (state.open ? { open: false } : null),
-						() => this.props.onSelect(id)
-					)
+					this.handleSelect(id)
 				}
 			}
 		}
@@ -184,14 +210,14 @@ export default class Catalog extends React.Component<
 	}
 
 	render() {
-		const { autoFocus, children } = this.props
+		const { autoFocus, children, placeholder } = this.props
 		const { open, value } = this.state
 		return (
 			<div className="catalog">
 				<div className="search">
 					<input
 						type="text"
-						placeholder={Catalog.Placeholder}
+						placeholder={placeholder}
 						autoFocus={autoFocus}
 						value={value}
 						onKeyDown={this.handleKeyDown}
@@ -235,32 +261,42 @@ export default class Catalog extends React.Component<
 	) {
 		const id = entry.last(undefined)
 		if (id !== undefined) {
-			let prefix: string
-			const dot =
-				tree[id].size > 0
-					? expanded
-						? Catalog.Expanded
-						: Catalog.Collapsed
-					: Catalog.Empty
-			if (this.props.catalog === CLASS) {
-				prefix =
-					entry.size > 1 ? dot.padStart((entry.size - 1) * Catalog.Spacing) : ""
-			} else {
-				prefix = dot.padStart(entry.size * Catalog.Spacing)
-			}
-			const className = ["entry"]
+			const className = ["entry", "noselect"]
+
 			if (focused) {
 				className.push("focused")
 			}
+
+			if (tree[id].size === 0) {
+				className.push("empty")
+			} else if (expanded) {
+				className.push("expanded")
+			} else {
+				className.push("collapsed")
+			}
+
+			const prefix = " ".repeat((entry.size - 1) * Catalog.Spacing)
+
 			return (
 				<div
 					key={index}
 					className={className.join(" ")}
 					onMouseEnter={_ => this.setState({ focus: index, mouse: true })}
-					onClick={_ => this.props.onSelect(id)}
 				>
-					{prefix}
-					<span>{nodes[id][LABEL]}</span>
+					<span className="prefix" onClick={_ => {
+						if (tree[id].size > 0) {
+							if (expanded) {
+								this.setState(state => {
+									const clone = Object.assign({}, state)
+									const increment = Object.assign(clone, { focus: state.focus + 1 })
+									return Catalog.collapseRoot(increment)
+								})
+							} else {
+								this.setState(state => Object.assign(Catalog.expandRoot(state, this.props), { focus: state.focus }))
+							}
+						}
+					}}>{prefix}</span>
+					<span className="label" onClick={_ => this.handleSelect(id)}>{nodes[id][LABEL]}</span>
 				</div>
 			)
 		}

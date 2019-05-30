@@ -24,6 +24,33 @@
 	display: flex;
 }
 
+.catalog .search .types {
+	/* display: flex;
+	flex-direction: row; */
+}
+
+.catalog .search .types .type {
+	border: 1px inset;
+	border-radius: 2px;
+	margin-left: 6px;
+	display: inline-block;
+}
+
+.catalog .search .types .type div {
+	display: inline-block;
+	vertical-align: top;
+	padding: 4px 3px 3px 3px;
+	height: 1em;
+}
+
+.catalog .search .types .type .close {
+	cursor: pointer;
+}
+
+.catalog .search .types .type .close:hover {
+	background: lightgrey;
+}
+
 input[type="text"] {
 	flex: 1;
 	padding: 1px 3px;
@@ -34,9 +61,37 @@ input[type="text"] {
 .catalog .tree .entry {
 	cursor: pointer;
 	white-space: pre;
+	display: flex;
 }
 
-.catalog .tree .entry.focused span {
+.catalog .tree .entry.expanded .prefix::after {
+	content: "○ ";
+}
+
+.catalog .tree .entry.collapsed .prefix::after {
+	content: "● ";
+}
+
+.catalog .tree .entry.empty .prefix::after {
+	content: "- ";
+}
+
+.catalog .tree .entry.expanded .prefix:hover::after {
+	content: "● ";
+	opacity: 0.3;
+}
+
+.catalog .tree .entry.collapsed .prefix:hover::after {
+	/* content: "○ "; */
+	content: "● ";
+	opacity: 0.3;
+}
+
+.catalog .tree .entry .label {
+	flex: 1;
+}
+
+.catalog .tree .entry.focused .label {
 	font-weight: bold;
 	text-decoration: underline;
 }

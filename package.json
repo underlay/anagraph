@@ -34,6 +34,7 @@
 		"@babel/polyfill": "^7.4.4",
 		"@types/react": "^16.8.19",
 		"@types/react-dom": "^16.8.4",
+		"fuse.js": "^3.4.5",
 		"immutable": "^4.0.0-rc.12",
 		"jsonld": "^1.6.2",
 		"react": "^16.8.6",
