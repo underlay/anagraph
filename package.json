@@ -1,6 +1,6 @@
 {
 	"name": "anagraph",
-	"version": "0.0.1",
+	"version": "0.1.0",
 	"description": "",
 	"main": "webpack.config.js",
 	"scripts": {
@@ -10,14 +10,14 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/joeltg/anagraph.git"
+		"url": "git+https://github.com/underlay/anagraph.git"
 	},
 	"author": "",
 	"license": "MIT",
 	"bugs": {
-		"url": "https://github.com/joeltg/anagraph/issues"
+		"url": "https://github.com/underlay/anagraph/issues"
 	},
-	"homepage": "https://github.com/joeltg/anagraph#readme",
+	"homepage": "https://github.com/underlay/anagraph#readme",
 	"devDependencies": {
 		"@babel/core": "^7.4.5",
 		"@babel/plugin-proposal-class-properties": "^7.4.4",

@@ -17,7 +17,7 @@ import SchemaJson from "./schema.json"
 
 // schema is the raw JSON object
 const schema: SchemaGraph = SchemaJson
-	; (window as any).schema = schema
+;(window as any).schema = schema
 
 export function wrap<T>(container: Container<T> | undefined): Array<T> {
 	if (Array.isArray(container)) {
@@ -31,12 +31,12 @@ export function wrap<T>(container: Container<T> | undefined): Array<T> {
 
 // nodes is an id-indexed object
 export const nodes: { [id: string]: SchemaNode } = {}
-	; (window as any).nodes = nodes
+;(window as any).nodes = nodes
 
 schema[GRAPH].forEach(node => (nodes[node[ID]] = node))
 
 export const classes: Set<string> = new Set([THING])
-	; (window as any).classes = classes
+;(window as any).classes = classes
 
 function traverseClasses(node: SchemaNode): boolean {
 	if (classes.has(node[ID])) {
@@ -91,9 +91,9 @@ export function enumerateAncestry(type: string, parent: Parent): string[] {
 export type Tree = { [id: string]: Set<string> }
 
 export const classTree: Tree = {}
-	; (window as any).classTree = classTree
+;(window as any).classTree = classTree
 export const propertyTree: Tree = {}
-	; (window as any).propertyTree = propertyTree
+;(window as any).propertyTree = propertyTree
 
 export const trees = {
 	[CLASS]: classTree,
@@ -106,11 +106,11 @@ export const roots = {
 }
 
 export const enumerations: { [type: string]: Set<string> } = {}
-	; (window as any).enumerations = enumerations
+;(window as any).enumerations = enumerations
 
 // domainMap is a map from class ids to an array of property ids
 export const domainMap: { [id: string]: string[] } = {}
-	; (window as any).domainMap = domainMap
+;(window as any).domainMap = domainMap
 
 function get(tree: Tree, id: string): Set<string> {
 	if (tree.hasOwnProperty(id)) {

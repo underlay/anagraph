@@ -12,7 +12,6 @@ interface CatalogProps {
 	catalog: CatalogType
 	roots: List<string>
 	autoFocus: boolean
-	// onFocus: () => void
 	onSelect: (id: string) => void
 }
 
@@ -27,7 +26,7 @@ interface CatalogState {
 export default class Catalog extends React.Component<
 	CatalogProps,
 	CatalogState
-	> {
+> {
 	private fuse: any
 	static Spacing = 2
 
@@ -96,8 +95,16 @@ export default class Catalog extends React.Component<
 		return null
 	}
 
-	static enumerate(roots: List<string>, set: Set<string>, tree: Tree): Set<string> {
-		return roots.reduce((set: Set<string>, root: string) => Catalog.enumerate(List(tree[root]), set.add(root), tree), set)
+	static enumerate(
+		roots: List<string>,
+		set: Set<string>,
+		tree: Tree
+	): Set<string> {
+		return roots.reduce(
+			(set: Set<string>, root: string) =>
+				Catalog.enumerate(List(tree[root]), set.add(root), tree),
+			set
+		)
 	}
 
 	constructor(props: CatalogProps) {
@@ -111,7 +118,11 @@ export default class Catalog extends React.Component<
 		}
 
 		const ids = Catalog.enumerate(props.roots, Set(), trees[props.catalog])
-		const records = ids.map(id => ({ id, label: nodes[id][LABEL], comment: nodes[id][COMMENT] }))
+		const records = ids.map(id => ({
+			id,
+			label: nodes[id][LABEL],
+			comment: nodes[id][COMMENT],
+		}))
 		this.fuse = new Fuse(records.toArray(), Catalog.FuseOptions)
 
 		this.tree = null
@@ -147,7 +158,12 @@ export default class Catalog extends React.Component<
 
 	handleSelect = (id: string) => {
 		this.setState(
-			{ open: false, value: "", focus: 0, entries: this.props.roots.map(root => List([root])) },
+			{
+				open: false,
+				value: "",
+				focus: 0,
+				entries: this.props.roots.map(root => List([root])),
+			},
 			() => this.props.onSelect(id)
 		)
 	}
@@ -155,10 +171,20 @@ export default class Catalog extends React.Component<
 	handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const { value } = event.target
 		if (value === "") {
-			this.setState({ focus: 0, value, entries: this.props.roots.map(root => List([root])), })
+			this.setState({
+				focus: 0,
+				value,
+				entries: this.props.roots.map(root => List([root])),
+			})
 		} else {
-			const records: string[] = this.fuse.search(value).slice(0, Catalog.MaxResults)
-			this.setState({ focus: 0, value, entries: List(records).map(record => List([record])) })
+			const records: string[] = this.fuse
+				.search(value)
+				.slice(0, Catalog.MaxResults)
+			this.setState({
+				focus: 0,
+				value,
+				entries: List(records).map(record => List([record])),
+			})
 		}
 	}
 
@@ -283,20 +309,32 @@ export default class Catalog extends React.Component<
 					className={className.join(" ")}
 					onMouseEnter={_ => this.setState({ focus: index, mouse: true })}
 				>
-					<span className="prefix" onClick={_ => {
-						if (tree[id].size > 0) {
-							if (expanded) {
-								this.setState(state => {
-									const clone = Object.assign({}, state)
-									const increment = Object.assign(clone, { focus: state.focus + 1 })
-									return Catalog.collapseRoot(increment)
-								})
-							} else {
-								this.setState(state => Object.assign(Catalog.expandRoot(state, this.props), { focus: state.focus }))
+					<span
+						className="prefix"
+						onClick={_ => {
+							if (tree[id].size > 0) {
+								if (expanded) {
+									this.setState(state => {
+										const clone = Object.assign({}, state)
+										const focus = state.focus + 1
+										const increment = Object.assign(clone, { focus })
+										return Catalog.collapseRoot(increment)
+									})
+								} else {
+									this.setState(state => {
+										const { focus } = state
+										const decrement = Catalog.expandRoot(state, this.props)
+										return Object.assign(decrement, { focus })
+									})
+								}
 							}
-						}
-					}}>{prefix}</span>
-					<span className="label" onClick={_ => this.handleSelect(id)}>{nodes[id][LABEL]}</span>
+						}}
+					>
+						{prefix}
+					</span>
+					<span className="label" onClick={_ => this.handleSelect(id)}>
+						{nodes[id][LABEL]}
+					</span>
 				</div>
 			)
 		}

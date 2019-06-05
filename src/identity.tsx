@@ -16,13 +16,14 @@ interface IdentityState {
 export default class Identity extends React.Component<
 	IdentityProps,
 	IdentityState
-	> {
+> {
 	static Placeholder = "Search for an existing object, or create a new one"
 	static Query = "q"
 	static sanitizeId = (id: string) =>
 		id.replace(/[^a-zA-Z0-9]/g, "-").replace(/-{2,}/, "-")
 
-	static OpenRefineRoot = "https://tools.wmflabs.org/openrefine-wikidata/en/api?queries="
+	static OpenRefineRoot =
+		"https://tools.wmflabs.org/openrefine-wikidata/en/api?queries="
 
 	static async OpenRefine(
 		query: string
