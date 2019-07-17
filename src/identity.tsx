@@ -22,6 +22,8 @@ export default class Identity extends React.Component<
 	static sanitizeId = (id: string) =>
 		id.replace(/[^a-zA-Z0-9]/g, "-").replace(/-{2,}/, "-")
 
+	static WikiDataPrefix = "http://www.wikidata.org/entity/"
+
 	static OpenRefineRoot =
 		"https://tools.wmflabs.org/openrefine-wikidata/en/api?queries="
 
