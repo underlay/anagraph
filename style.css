@@ -6,7 +6,7 @@
 	display: flex;
 	flex-direction: column;
 	margin: 0.5em;
-	font-family: monospace;
+	font-family: Monaco, monospace;
 }
 
 .identity .drawer {
@@ -16,7 +16,7 @@
 .catalog {
 	display: flex;
 	flex-direction: column;
-	font-family: monospace;
+	font-family: Monaco, monospace;
 	margin: 0.5em;
 }
 
@@ -25,26 +25,26 @@
 }
 
 .catalog .search .types {
-	/* display: flex;
-	flex-direction: row; */
+	display: flex;
+	flex-direction: row;
 }
 
 .catalog .search .types .type {
 	border: 1px inset;
-	border-radius: 2px;
+	border-radius: 4px;
 	margin-left: 6px;
-	display: inline-block;
+	padding: 0;
 }
 
 .catalog .search .types .type div {
 	display: inline-block;
-	vertical-align: top;
-	padding: 4px 3px 3px 3px;
-	height: 1em;
+	vertical-align: text-top;
+	padding: 2px 4px;
 }
 
 .catalog .search .types .type .close {
 	cursor: pointer;
+	border-left: 1px inset;
 }
 
 .catalog .search .types .type .close:hover {
@@ -53,9 +53,10 @@
 
 input[type="text"] {
 	flex: 1;
-	padding: 1px 3px;
+	padding: 2px;
 	font-family: inherit;
 	font-size: inherit;
+	border: 1px inset;
 }
 
 .catalog .tree .entry {

@@ -19,25 +19,25 @@
 	},
 	"homepage": "https://github.com/underlay/anagraph#readme",
 	"devDependencies": {
-		"@babel/core": "^7.4.5",
-		"@babel/plugin-proposal-class-properties": "^7.4.4",
-		"@babel/plugin-proposal-object-rest-spread": "^7.4.4",
-		"@babel/preset-env": "^7.4.5",
+		"@babel/core": "^7.5.5",
+		"@babel/plugin-proposal-class-properties": "^7.5.5",
+		"@babel/plugin-proposal-object-rest-spread": "^7.5.5",
+		"@babel/preset-env": "^7.5.5",
 		"@babel/preset-react": "^7.0.0",
 		"@babel/preset-typescript": "^7.3.3",
 		"babel-loader": "^8.0.6",
-		"typescript": "^3.5.1",
-		"webpack": "^4.33.0",
-		"webpack-cli": "^3.3.3"
+		"typescript": "^3.6.2",
+		"webpack": "^4.39.3",
+		"webpack-cli": "^3.3.7"
 	},
 	"dependencies": {
 		"@babel/polyfill": "^7.4.4",
-		"@types/react": "^16.8.19",
-		"@types/react-dom": "^16.8.4",
+		"@types/react": "^16.9.2",
+		"@types/react-dom": "^16.9.0",
 		"fuse.js": "^3.4.5",
 		"immutable": "^4.0.0-rc.12",
 		"jsonld": "^1.6.2",
-		"react": "^16.8.6",
-		"react-dom": "^16.8.6"
+		"react": "^16.9.0",
+		"react-dom": "^16.9.0"
 	}
 }
